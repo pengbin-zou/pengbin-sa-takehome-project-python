@@ -12,25 +12,131 @@
       </h5>
       <hr class="mt-40">
       <div class="mt-20 text-info">
-        Total due: $<span class="amount" data-amount="{{ amount }}"></span>
+        Total due: $<span id="display-amount" data-amount="{{ amount }}">{{ (amount / 100)|int if amount else '0' }}</span>
       </div>
     </div>
     <div class="card box-shadow mt-40">
       <div class="card-body">
-        <form name="payment-form">
+        <form id="payment-form">
           <div>
             <label for="email">Email address</label>
             <input type="email" class="form-control" id="email" name="email" placeholder="you@email.com">
           </div>
-          <div class="mt-20 text-center text-secondary border-placeholder">
-            Add Stripe Element here!
+          <!-- Stripe Payment Element placeholder -->
+          <div class="mt-20" id="payment-element">
+            <!-- Stripe Payment Element will be inserted here -->
           </div>
           <div class="mt-20">
-            <button type="submit" class="btn btn-lg btn-block btn-primary">Pay $<span class="amount" data-amount="{{ amount }}"></span></button>
+            <button type="submit" class="btn btn-lg btn-block btn-primary">
+              Pay $<span id="pay-button-amount">{{ (amount / 100)|int if amount else '0' }}</span>
+            </button>
           </div>
+          <!-- Error/Success message display -->
+          <p id="payment-message" class="mt-20 text-center text-danger"></p>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Stripe JS -->
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", async function () {
+    let stripe;
+    let elements;
+    let clientSecret;
+
+    // ✅ Extract amount properly from data attribute
+    const amountElement = document.querySelector("#display-amount");
+    const amount = amountElement ? parseInt(amountElement.getAttribute("data-amount")) : 0;
+
+    // Debugging Log
+    console.log("✅ Extracted Amount for Payment Intent:", amount);
+
+    if (amount <= 0) {
+        document.getElementById("payment-message").innerText = "Invalid amount";
+        return;
+    }
+
+    try {
+        // ✅ Get the publishable key and initialize Stripe
+        const configResponse = await fetch("/config");
+        const configData = await configResponse.json();
+        stripe = Stripe(configData.publishableKey);
+
+        // ✅ Request a Payment Intent from the server
+        const paymentIntentResponse = await fetch("/create-payment-intent", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount: amount }) // ✅ Ensure correct amount is sent
+        });
+
+        const paymentIntentData = await paymentIntentResponse.json();
+        console.log("✅ Received response:", paymentIntentData);
+
+        if (paymentIntentData.error) {
+            document.getElementById("payment-message").innerText = paymentIntentData.error;
+            return;
+        }
+
+        if (!paymentIntentData.clientSecret) {
+            document.getElementById("payment-message").innerText = "Error: Client Secret not received!";
+            return;
+        }
+
+        clientSecret = paymentIntentData.clientSecret;
+
+        // ✅ Initialize Stripe Elements
+        elements = stripe.elements({ clientSecret });
+
+        // ✅ Mount Stripe Payment Element correctly
+        const paymentElement = elements.create("payment");
+        paymentElement.mount("#payment-element");
+
+        console.log("✅ Stripe Payment Element Mounted!");
+
+    } catch (error) {
+        console.error("❌ Error initializing Stripe Elements:", error);
+        document.getElementById("payment-message").innerText = "Error initializing payment.";
+    }
+
+    // ✅ Handle payment submission
+    const paymentForm = document.getElementById("payment-form");
+    if (paymentForm) {
+        paymentForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            try {
+
+                await elements.submit();
+
+                const result = await stripe.confirmPayment({
+                    elements,
+                    clientSecret,
+                    confirmParams: {
+                        return_url: window.location.origin + `/success?payment_intent=${clientSecret.split('_secret')[0]}&amount=${amount}`
+                    },
+                    redirect: 'if_required'
+                });
+
+                if (result.error) {
+                    document.getElementById("payment-message").innerText = error.message;
+                    console.error("❌ Payment Error:", result.error);
+                } else if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
+                    window.location.href = `/success?payment_intent=${result.paymentIntent.id}&amount=${amount}`;
+                } else {
+                    document.getElementById("payment-message").innerText = "Payment processing. Please wait...";
+                }
+            } catch (error) {
+                console.error("❌ Payment Error:", error);
+                document.getElementById("payment-message").innerText = "Payment failed. Try again.";
+            }
+        });
+    } else {
+        console.error("❌ ERROR: Payment form not found!");
+    }
+  });
+</script>
+
 {% endblock %}

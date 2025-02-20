@@ -9,9 +9,36 @@
     </h1>
   </div>
   <div class="mt-40 text-center">
-    <div class="mt-20 text-center text-secondary border-placeholder">
-      Add details about the payment here!
+    <h3>Thank you for your purchase!</h3>
+    <p class="mt-20 text-secondary">
+      Your payment was successfully processed.
+    </p>
+    <div class="mt-20 text-info">
+      <strong>Payment Intent ID:</strong> <span id="payment-intent-id"></span>
+    </div>
+    <div class="mt-20 text-info">
+      <strong>Total Charged:</strong> $<span id="total-amount"></span>
     </div>
   </div>
 </main>
+
+<script>
+  // Extract Payment Intent ID and Amount from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const paymentIntentId = urlParams.get("payment_intent");
+  const amount = urlParams.get("amount");
+
+  console.log("✅ Extracted from URL:", { paymentIntentId, amount }); // Debugging log
+
+  // Display Payment Intent ID and Total Amount
+  if (paymentIntentId) {
+    document.getElementById("payment-intent-id").innerText = paymentIntentId;
+  }
+  if (amount) {
+    document.getElementById("total-amount").innerText = parseInt(amount) / 100;
+  } else {
+    document.getElementById("total-amount").innerText = "Error: Amount not received.";
+  }
+</script>
+
 {% endblock %}
