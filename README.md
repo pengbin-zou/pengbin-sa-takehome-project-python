@@ -229,7 +229,7 @@ paymentElement.mount("#payment-element");
 console.log("Received clientSecret:", clientSecret);
 ```
 ### 3. **Payment Intent Not Initializing**  
-**Happened at Step**: Fetching clientSecret from Backend (`/create-payment-intent in app.py`) 
+**Happened at Step**: Fetching `clientSecret` from Backend (`/create-payment-intent in app.py`) 
 
 **Issue**:  
 - The `clientSecret` wasn’t reaching the frontend, causing payment confirmation to fail and preventing customers from completing transactions.  
