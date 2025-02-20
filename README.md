@@ -99,12 +99,14 @@ This is a Flask-based server-side rendered application with client-side Stripe i
 ## Project Structure
 
 ```
-stripe-payment-integration/
+SA Take-Home Project/
 ├── app.py            # Main Flask application
 ├── views             # HTML templates
 │   ├── index.html    # Home page
 │   ├── checkout.html # Payment form
 │   ├── success.html  # Payment confirmation
+│   └── layouts/      # Layout templates
+│       └── main.html # Base layout
 ├── public            # Static assets (e.g., CSS, JS)
 ├── sample.env        # Sample API keys
 ├── requirements.txt  # Python dependencies
