@@ -44,9 +44,7 @@ git clone https://github.com/your-github-username/pengbin-sa-takehome-project.gi
 cd pengbin-sa-takehome-project
 ```
 
-Create a virtual environment
-
-Use **Python 3.11** to create and activate your virtual environment:
+Create and activate a virtual environment using **Python 3.11**:
 ```sh
 python3.11 -m venv newvenv
 source newvenv/bin/activate  # Windows: newvenv\Scripts\activate
