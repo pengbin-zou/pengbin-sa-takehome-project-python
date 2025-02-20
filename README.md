@@ -113,7 +113,7 @@ stripe-payment-integration/
 
 ## Technical Implementation
 
-#### Stripe Tools Used
+### Stripe Tools Used
 
 - **[Payment Intents API](https://stripe.com/docs/payments/payment-intents)**: Create a payment intent with the amount and currency on the server side (`stripe.PaymentIntent.create`).
 - **[Payment Element](https://docs.stripe.com/js/elements_object/create)**: Render a secure, customizable payment form on the client side (`elements.create("payment")`).
