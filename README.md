@@ -36,7 +36,7 @@ This project is a take-home assignment demonstrating a simple e-commerce checkou
 
 1. Clone the repository
 ```sh
-git clone https://github.com/pengbin-zou/pengbin-sa-takehome-project.git
+git clone https://github.com/pengbin-zou/pengbin-sa-takehome-project-python.git
 cd pengbin-sa-takehome-project
 ```
 
