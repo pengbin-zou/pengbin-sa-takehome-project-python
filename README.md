@@ -45,9 +45,11 @@ cd pengbin-sa-takehome-project
 ```
 
 Create a virtual environment
+
+Use **Python 3.11** to create and activate your virtual environment:
 ```sh
 python3.11 -m venv newvenv
-source newvenv/bin/activate  # On Windows use venv\Scripts\activate
+source newvenv/bin/activate  # Windows: newvenv\Scripts\activate
 ```
 
 Install dependencies
