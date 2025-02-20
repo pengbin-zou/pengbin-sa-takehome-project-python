@@ -30,7 +30,7 @@ This project is a **simple e-commerce checkout system** that integrates **Stripe
 
 Ensure you have the following installed:
 
-- **Python 3.11**
+- **Python 3.11 (strongly recommended)**
 - **Flask**
 - **Stripe API Keys** (Create an account at [Stripe](https://dashboard.stripe.com/register))
 
