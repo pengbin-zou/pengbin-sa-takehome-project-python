@@ -47,12 +47,12 @@
     let elements;
     let clientSecret;
 
-    // ✅ Extract amount properly from data attribute
+    // Extract amount properly from data attribute
     const amountElement = document.querySelector("#display-amount");
     const amount = amountElement ? parseInt(amountElement.getAttribute("data-amount")) : 0;
 
     // Debugging Log
-    console.log("✅ Extracted Amount for Payment Intent:", amount);
+    console.log("Extracted Amount for Payment Intent:", amount);
 
     if (amount <= 0) {
         document.getElementById("payment-message").innerText = "Invalid amount";
@@ -60,20 +60,20 @@
     }
 
     try {
-        // ✅ Get the publishable key and initialize Stripe
+        // Get the publishable key and initialize Stripe
         const configResponse = await fetch("/config");
         const configData = await configResponse.json();
         stripe = Stripe(configData.publishableKey);
 
-        // ✅ Request a Payment Intent from the server
+        // Request a Payment Intent from the server
         const paymentIntentResponse = await fetch("/create-payment-intent", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ amount: amount }) // ✅ Ensure correct amount is sent
+            body: JSON.stringify({ amount: amount }) // Ensure correct amount is sent
         });
 
         const paymentIntentData = await paymentIntentResponse.json();
-        console.log("✅ Received response:", paymentIntentData);
+        console.log("Received response:", paymentIntentData);
 
         if (paymentIntentData.error) {
             document.getElementById("payment-message").innerText = paymentIntentData.error;
@@ -87,21 +87,21 @@
 
         clientSecret = paymentIntentData.clientSecret;
 
-        // ✅ Initialize Stripe Elements
+        // Initialize Stripe Elements
         elements = stripe.elements({ clientSecret });
 
-        // ✅ Mount Stripe Payment Element correctly
+        // Mount Stripe Payment Element correctly
         const paymentElement = elements.create("payment");
         paymentElement.mount("#payment-element");
 
-        console.log("✅ Stripe Payment Element Mounted!");
+        console.log("Stripe Payment Element Mounted!");
 
     } catch (error) {
         console.error("❌ Error initializing Stripe Elements:", error);
         document.getElementById("payment-message").innerText = "Error initializing payment.";
     }
 
-    // ✅ Handle payment submission
+    // Handle payment submission
     const paymentForm = document.getElementById("payment-form");
     if (paymentForm) {
         paymentForm.addEventListener("submit", async (event) => {
