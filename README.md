@@ -171,12 +171,12 @@ def create_payment_intent():
 
 ### Challenges Faced & How They Were Solved
 
-1. **Payment Intent Not Initializing**: The `clientSecret` wasn’t reaching the frontend.
-   - Solution: Fixed by ensuring the backend returned it correctly in the JSON response.
-2. **Amount Display Issue**: Total showed as `25.00` instead of `25`.
-   - Solution: Resolved by dividing `amount` by 100 using `parseInt(amount) / 100`.
-3. **Stripe Elements Not Mounting**: The Payment Element failed to render due to a timing issue.
-   - Solution: Fixed by ensuring `clientSecret` was available before calling `elements.create()`.
+1. **Payment Intent Not Initializing**: The `clientSecret` wasn’t reaching the frontend, causing payment confirmation to fail.
+   - Solution: Returned the `clientSecret` in the JSON response from `/create-payment-intent`, ensuring the frontend had what it needed.
+2. **Amount Display Issue**: Total showed as `25.00` instead of `25`, leading to confusion for users.
+   - Solution: Resolved by dividing the `amount` by 100 using `parseInt(amount) / 100`.
+3. **Stripe Elements Not Mounting**: The Payment Element failed to render because the `clientSecret` was undefined at the time of mounting.
+   - Solution: Ensured the code fetched `clientSecret` before calling `elements.create("payment")`.
 
 
 ## Future Enhancements
