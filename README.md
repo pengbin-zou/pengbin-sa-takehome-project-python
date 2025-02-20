@@ -118,7 +118,7 @@ stripe-payment-integration/
 - **[Payment Intents API](https://stripe.com/docs/payments/payment-intents)**: Create a payment intent with the amount and currency on the server side (`stripe.PaymentIntent.create`).
 - **[Payment Element](https://docs.stripe.com/js/elements_object/create)**: Render a secure, customizable payment form on the client side (`elements.create("payment")`).
 
-#### Key Backend Code (`app.py`)
+### Key Backend Code (`app.py`)
 
 ```python
 @app.route('/create-payment-intent', methods=['POST'])
