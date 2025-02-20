@@ -37,7 +37,7 @@ This project is a take-home assignment demonstrating a simple e-commerce checkou
 1. Clone the repository
 ```sh
 git clone https://github.com/pengbin-zou/pengbin-sa-takehome-project-python.git
-cd pengbin-sa-takehome-project
+cd pengbin-sa-takehome-project-python
 ```
 
 2. Create and activate a virtual environment using **Python 3.11**:
