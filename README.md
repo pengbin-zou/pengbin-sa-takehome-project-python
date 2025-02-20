@@ -39,8 +39,8 @@ Ensure you have the following installed:
 
 Clone the repository
 ```sh
-git clone https://github.com/your-username/stripe-payment-integration.git
-cd stripe-payment-integration
+git clone https://github.com/your-github-username/pengbin-sa-takehome-project.git
+cd pengbin-sa-takehome-project
 ```
 
 Create a virtual environment
