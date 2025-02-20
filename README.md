@@ -30,7 +30,7 @@ This project is a **simple e-commerce checkout system** that integrates **Stripe
 
 Ensure you have the following installed:
 
-- **Python 3.x**
+- **Python 3.11**
 - **Flask**
 - **Stripe API Keys** (Create an account at [Stripe](https://dashboard.stripe.com/register))
 
@@ -45,8 +45,8 @@ cd pengbin-sa-takehome-project
 
 Create a virtual environment
 ```sh
-python3 -m venv venv
-source venv/bin/activate  # On Windows use venv\Scripts\activate
+python3.11 -m venv newvenv
+source newvenv/bin/activate  # On Windows use venv\Scripts\activate
 ```
 
 Install dependencies
