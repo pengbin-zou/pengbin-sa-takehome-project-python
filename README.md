@@ -71,6 +71,11 @@ STRIPE_PUBLISHABLE_KEY=pk_test_xxxxxxxxxxxxxxxxx
 ```sh
 flask run
 ```
+**Note:** If you run `flask run` and still see references to Python 3.13, force Python to use your local environment:
+```sh
+python -m flask run
+```
+This ensures you’re using **Python 3.11** from your virtual environment, rather than the system’s Python 3.13.
 
 Then, open [http://127.0.0.1:5000/](http://127.0.0.1:5000/) in your browser to access the application.
 
