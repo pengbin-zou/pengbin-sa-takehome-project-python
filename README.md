@@ -140,7 +140,7 @@ def create_payment_intent():
 ### Approach
 Aim to build a minimal e-commerce checkout system focusing on Stripe integration. Use Flask for its simplicity and paired it with Stripe’s Payment Intents and Payment Element for a secure, user-friendly payment experience.
 
-#### Challenges Faced
+### Challenges Faced
 
 1. **Payment Intent Not Initializing**: The `clientSecret` wasn’t reaching the frontend. Fixed by ensuring the backend returned it correctly in the JSON response.
 2. **Amount Display Issue**: Total showed as `25.00` instead of `25`. Resolved by dividing `amount` by 100 using `parseInt(amount) / 100`.
