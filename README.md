@@ -94,8 +94,38 @@ This ensures you’re using **Python 3.11** from your virtual environment.
 
 ### Architecture
 This is a Flask-based server-side rendered application with client-side Stripe integration. The frontend sends POST requests to the backend (`app.py`), which interacts with Stripe APIs and returns a `clientSecret` to initialize the Payment Element.
-
-
+```
++---------------------+
+|     Client (Browser)    |
+|     (HTML + JS)       |
+|                       |
+|  1. POST /create-payment-intent  |
+|     (checkout.html)    |
++---------------------+
+          |
+          | HTTP Request
+          v
++---------------------+
+|     Flask Backend   |
+|     (app.py)        |
+|                       |
+|  2. Interact with    |
+|     Stripe Payment Intent APIs  |
+|     (app.py) |
+|  3. Return clientSecret |
++---------------------+
+          |
+          | HTTP Response
+          v
++---------------------+
+|     Client (Browser)    |
+|     (Payment Element)   |
+|  4. Initialize Payment  |
+|     Element with        |
+|     clientSecret
+|   (checkout.html)       |
++---------------------+
+```
 ## Project Structure
 
 ```
