@@ -29,7 +29,7 @@ This project is a take-home assignment demonstrating a simple e-commerce checkou
 
 - **Python 3.11**: Strongly recommended (Python 3.13 has compatibility issues with some dependencies, including older Stripe versions).
 - **Flask**: Lightweight web framework used for rapid prototyping.
-- **Stripe API Keys** (Create an account at [Stripe](https://dashboard.stripe.com/register))
+- **Stripe API Keys** (Create an account at [Stripe](https://dashboard.stripe.com/register)). Once registered, follow this [guide](https://docs.stripe.com/keys) to generate your **Secret** and **Publishable Keys**.
 
 ### Setup Instructions
 
