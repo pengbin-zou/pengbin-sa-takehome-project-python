@@ -86,14 +86,14 @@ Then, open [http://127.0.0.1:5000/](http://127.0.0.1:5000/) in your browser to a
 
 1. **User selects a book** → enter your email address and click **"Pay"**.
 2. **Backend creates a Stripe Payment Intent** → `/create-payment-intent`.
-3. **Stripe renders a secure payment form** via **Elements API**.
+3. **Stripe renders a secure payment form** via **Payment Element**.
 
 4. **Enter Dummy Payment Info for Testing**  
-   For example, use Stripe’s test card:
+   For example, use Stripe’s **test card**:
    ```
    4242 4242 4242 4242
    ```
-   with any future date for expiry and any 3-digit CVC.
+   with any **future expiration date** (e.g., `11/30`) and any **3-digit CVC** (e.g., `192`).
 5. **User submits payment** → Payment is processed & confirmed.
 6. **Upon success**, user is redirected to `/success`, displaying:
    - ✅ **Payment Intent ID**
