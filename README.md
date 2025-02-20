@@ -18,7 +18,7 @@ This project is a take-home assignment demonstrating a simple e-commerce checkou
 - [How It Works](#how-it-works)  
 - [Project Structure](#project-structure)  
 - [Technical Implementation](#technical-implementation)  
-- [Challenges](#challenges) 
+- [Challenges Faced & How They Were Solved](#challenges-faced--how-they-were-solved) 
 - [Future Enhancements](#future-enhancements)  
 
 
@@ -167,17 +167,96 @@ def create_payment_intent():
         return jsonify({'error': str(e)}), 500
 ```
 
-## Challenges
+## Challenges Faced & How They Were Solved
 
-### Challenges Faced & How They Were Solved
+### 1. **Amount Display Issue**  
+**Happened at Step**: Displaying Total Amount in Checkout Page (`checkout.html`)  
 
-1. **Amount Display Issue**: Total showed as `25.00` instead of `25`, leading to confusion for users.
-   - Solution: Resolved by dividing the `amount` by 100 using `parseInt(amount) / 100`.
-2. **Payment Intent Not Initializing**: The `clientSecret` wasn’t reaching the frontend, causing payment confirmation to fail.
-   - Solution: Returned the `clientSecret` in the JSON response from `/create-payment-intent`, ensuring the frontend had what it needed.
-3. **Stripe Elements Not Mounting**: The Payment Element failed to render because the `clientSecret` was undefined at the time of mounting.
-   - Solution: Ensured the code fetched `clientSecret` before calling `elements.create("payment")`.
+**Issue**:  
+- The total amount was displayed as $25.00 instead of $25 in the checkout page, which could confuse users during payment.  
+- This occurred because Stripe returns the amount in cents (e.g., 2500 for $25), but the JavaScript initially formatted it as a floating-point value instead of an integer.  
 
+**Cause**:  
+- The frontend and backend both needed to convert the amount from cents to dollars by dividing by 100, but the initial implementation lacked consistent formatting.
+
+**Solution**:  
+- Applied `parseInt(amount) / 100` in the frontend JavaScript and Flask backend to ensure consistent conversion from cents to dollars.  
+- Added validation in both layers to prevent incorrect formatting, improving reliability and user clarity during checkout.
+
+```javascript
+// Correcting amount formatting in checkout.html
+document.getElementById("pay-button-amount").innerText = parseInt(amount) / 100;
+```
+### 2. **Stripe Elements Not Mounting**  
+**Happened at Step**: Rendering Payment Element in Checkout (`checkout.html`)  
+
+**Issue**:  
+- The Payment Element failed to render, leaving users unable to enter payment details and complete purchases.  
+
+**Cause**:  
+- The `clientSecret` was undefined during mounting because the fetch request to `/create-payment-intent` completed asynchronously after the `elements.create("payment")` call.  
+
+**Solution**:  
+- Used `async/await` to ensure the `clientSecret` was fetched before calling `elements.create("payment")`.  
+- Thoroughly tested the payment flow to confirm the Payment Element rendered reliably, improving the checkout experience.
+
+```javascript
+// Ensure clientSecret is received before initializing Stripe Elements
+const paymentIntentResponse = await fetch("/create-payment-intent", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ amount: amount })
+});
+const paymentIntentData = await paymentIntentResponse.json();
+
+if (!paymentIntentData.clientSecret) {
+    document.getElementById("payment-message").innerText = "Error: Client Secret not received!";
+    return;
+}
+
+const clientSecret = paymentIntentData.clientSecret;
+
+// Initialize Stripe Elements after receiving clientSecret
+const stripe = Stripe("your-publishable-key");
+const elements = stripe.elements({ clientSecret });
+const paymentElement = elements.create("payment");
+paymentElement.mount("#payment-element");
+```
+**Verification**:  
+- Added a debugging log to check if clientSecret was received before initializing Stripe Elements:
+
+```javascript
+console.log("Received clientSecret:", clientSecret);
+```
+### 3. **Payment Intent Not Initializing**  
+**Happened at Step**: Fetching clientSecret from Backend (`/create-payment-intent in app.py`) 
+
+**Issue**:  
+- The `clientSecret` wasn’t reaching the frontend, causing payment confirmation to fail and preventing customers from completing transactions.  
+
+**Cause**:  
+- The JSON response from `/create-payment-intent` was missing the `clientSecret` due to an error in the Flask route, likely from improper error handling or response formatting.
+
+**Solution**:
+- Ensured `clientSecret` was explicitly included in the JSON response from Flask.
+```python
+# Corrected Flask route to return clientSecret
+@app.route('/create-payment-intent', methods=['POST'])
+def create_payment_intent():
+    data = request.json
+    amount = data.get("amount")
+    try:
+        intent = stripe.PaymentIntent.create(
+            amount=amount,
+            currency='usd'
+        )
+        return jsonify({'clientSecret': intent.client_secret})  
+    except stripe.error.StripeError as e:
+        return jsonify({'error': str(e)}), 500
+```
+**Verification**:  
+- Used Stripe’s test card (`4242 4242 4242 4242`) to confirm payment worked.
+- Opened developer tools (Network tab) to inspect API responses and confirm clientSecret was received.
 
 ## Future Enhancements
 
