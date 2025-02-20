@@ -110,7 +110,7 @@ This is a Flask-based server-side rendered application with client-side Stripe i
 |     (app.py)        |
 |                       |
 |  2. Interact with    |
-|     Stripe Payment Intent APIs  |
+|     Stripe Payment Intent API  |
 |     (app.py) |
 |  3. Return clientSecret |
 +---------------------+
