@@ -99,7 +99,7 @@ This is a Flask-based server-side rendered application with client-side Stripe i
 ## Project Structure
 
 ```
-SA Take-Home Project/
+PengBin SA Take-Home Project/
 ├── app.py            # Main Flask application
 ├── views             # HTML templates
 │   ├── index.html    # Home page
